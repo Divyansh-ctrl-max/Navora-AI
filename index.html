@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Navora AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<!-- PARTICLES -->
+
+<div class="particles">
+
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+
+</div>
+
+<!-- NAVBAR -->
+
+<div class="top-bar">
+
+    <h2>✈ Navora AI</h2>
+
+    <div>
+
+        <a href="/">Home</a>
+
+        <a href="/my_trips">My Trips</a>
+
+        <a href="/logout">Logout</a>
+
+    </div>
+
+</div>
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <h1>
+
+        Discover Your Next
+
+        <span>Adventure</span>
+
+    </h1>
+
+    <p>
+
+        AI Powered Travel Planner
+
+    </p>
+
+    <form method="POST"
+          class="trip-form">
+
+        <input
+            type="text"
+            id="destination"
+            name="destination"
+            placeholder="Destination"
+            required>
+
+        <input
+            type="number"
+            id="days"
+            name="days"
+            placeholder="Trip Days"
+            required>
+
+        <input
+            type="number"
+            id="budget"
+            name="budget"
+            placeholder="Budget ₹"
+            required>
+
+        <select
+            name="mood"
+            required>
+
+            <option value="">
+                Choose Travel Mood
+            </option>
+
+            <option>Adventure</option>
+
+            <option>Luxury</option>
+
+            <option>Relax</option>
+
+            <option>Romantic</option>
+
+            <option>Party</option>
+
+        </select>
+
+        <div style="display:flex;gap:10px;">
+
+            <button
+                type="submit"
+                style="flex:1;">
+
+                Generate AI Journey 🚀
+
+            </button>
+
+            <button
+                type="button"
+                id="voiceBtn">
+
+                🎤
+
+            </button>
+
+        </div>
+
+    </form>
+
+</section>
+
+<!-- STATS -->
+
+<div class="stats-section">
+
+    <div class="stat-card">
+
+        <h1>500+</h1>
+
+        <p>Trips Planned</p>
+
+    </div>
+
+    <div class="stat-card">
+
+        <h1>50+</h1>
+
+        <p>Destinations</p>
+
+    </div>
+
+    <div class="stat-card">
+
+        <h1>24/7</h1>
+
+        <p>AI Assistant</p>
+
+    </div>
+
+</div>
+
+<!-- TRAVEL POSTER -->
+
+{% if destination %}
+
+<div class="travel-poster">
+
+    <div class="poster-overlay">
+
+        <h1>{{ destination|upper }}</h1>
+
+        <h2>{{ mood }} MODE</h2>
+
+        <p>{{ days }} DAYS</p>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+<!-- PLAN -->
+
+{% if plan %}
+
+<div class="plan-card">
+
+    <h2>🌍 AI Trip Plan</h2>
+
+    <pre>{{ plan }}</pre>
+
+    <form action="/save_trip"
+          method="POST">
+
+        <input type="hidden"
+               name="destination"
+               value="{{ destination }}">
+
+        <input type="hidden"
+               name="days"
+               value="{{ days }}">
+
+        <input type="hidden"
+               name="budget"
+               value="{{ budget }}">
+
+        <input type="hidden"
+               name="mood"
+               value="{{ mood }}">
+
+        <button type="submit">
+
+            Save Trip 💾
+
+        </button>
+
+    </form>
+
+</div>
+
+{% endif %}
+
+<!-- DNA -->
+
+{% if dna %}
+
+<div class="plan-card">
+
+    <h2>🧬 Travel DNA</h2>
+
+    <h1>{{ dna }}</h1>
+
+</div>
+
+{% endif %}
+
+<!-- BUDGET -->
+
+{% if budget %}
+
+<div class="budget-card">
+
+    <h2>💰 Budget Breakdown</h2>
+
+    <p>🏨 Hotels: ₹{{ hotel_budget }}</p>
+
+    <br>
+
+    <p>🍜 Food: ₹{{ food_budget }}</p>
+
+    <br>
+
+    <p>🚕 Transport: ₹{{ transport_budget }}</p>
+
+    <br>
+
+    <p>🎟 Activities: ₹{{ activity_budget }}</p>
+
+    <br>
+
+    <p>🛟 Emergency: ₹{{ emergency_budget }}</p>
+
+</div>
+
+{% endif %}
+
+<!-- AI BUTTON -->
+
+<div class="chatbot">
+
+    🤖
+
+</div>
+
+<!-- VOICE INPUT -->
+
+<script>
+
+const voiceBtn = document.getElementById("voiceBtn");
+
+voiceBtn.addEventListener("click", () => {
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+
+        alert("Voice Recognition Not Supported");
+
+        return;
+    }
+
+    const recognition =
+        new SpeechRecognition();
+
+    recognition.start();
+
+    voiceBtn.innerHTML = "🎙️";
+
+    recognition.onresult = (event) => {
+
+        const text =
+            event.results[0][0].transcript.toLowerCase();
+
+        const days =
+            text.match(/\d+/);
+
+        const budget =
+            text.match(/budget\s*(\d+)/);
+
+        let city =
+            text.replace(/budget.*$/,'')
+                .replace(/\d+/g,'')
+                .trim();
+
+        document.getElementById(
+            "destination"
+        ).value = city;
+
+        if(days){
+
+            document.getElementById(
+                "days"
+            ).value = days[0];
+        }
+
+        if(budget){
+
+            document.getElementById(
+                "budget"
+            ).value = budget[1];
+        }
+
+        voiceBtn.innerHTML = "🎤";
+    };
+
+});
+
+</script>
+
+</body>
+
+</html>

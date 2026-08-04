@@ -1,0 +1,93 @@
+```html
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>My Trips - Navora AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="particles">
+
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+
+</div>
+
+<div class="top-bar">
+
+    <h2>📁 My Saved Trips</h2>
+
+    <div>
+
+        <a href="/">Home</a>
+
+        <a href="/logout">Logout</a>
+
+    </div>
+
+</div>
+
+<div class="trip-grid">
+
+{% if trips %}
+
+    {% for trip in trips %}
+
+    <div class="card">
+
+        <h2>🌍 {{ trip.destination }}</h2>
+
+        <br>
+
+        <p>📅 {{ trip.days }} Days</p>
+
+        <p>💰 ₹{{ trip.budget }}</p>
+
+        <p>🎭 {{ trip.mood }}</p>
+
+        <a href="/delete/{{ trip.id }}"
+           class="delete-btn">
+
+            Delete Trip
+
+        </a>
+
+    </div>
+
+    {% endfor %}
+
+{% else %}
+
+    <div class="card">
+
+        <h2>No Trips Saved Yet 🚀</h2>
+
+        <br>
+
+        <p>
+
+            Generate your first AI journey.
+
+        </p>
+
+    </div>
+
+{% endif %}
+
+</div>
+
+</body>
+
+</html>
+```
