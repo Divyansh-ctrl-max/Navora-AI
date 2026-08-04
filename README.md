@@ -226,6 +226,4 @@ git push origin feature-name
 
 **Divyansh Pandey**
 
-Email: your-email@example.com
-
-GitHub: https://github.com/yourusername
+Email: pandeydivyansh934@gmail.com
